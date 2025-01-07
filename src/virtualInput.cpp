@@ -3,17 +3,27 @@
 // Licensed under the MIT License. See LICENSE file for details.
 
 #include "headers/virtualInput.hpp"
+#include <iostream>
 #include <linux/input-event-codes.h>
+#include <cstring> // для strerror
+#include <cerrno>  // для errno
+
 
 namespace remoteGraphicsTablet {
-    VirtualInput::VirtualInput(){
-        deviceFD = create_uinput_device("Virtual input");
+    VirtualInput::VirtualInput(std::string deviceName){
+        deviceFD = create_uinput_device(deviceName);
         send_sync();
     }
 
+    VirtualInput::VirtualInput() : VirtualInput("Virtual input") {}
+
     void VirtualInput::move_mouse_rel(int x, int y) {
-        send_event(EV_REL, REL_X, x);
-        send_event(EV_REL, REL_Y, y);
+        if(x != 0){
+            send_event(EV_REL, REL_X, x);
+        }
+        if(y != 0){
+            send_event(EV_REL, REL_Y, y);
+        }
         send_sync();
     }
 

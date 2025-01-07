@@ -1,7 +1,7 @@
 bin_name = remote-graphics-tablet
 
 link_libs = 
-objects = main.o virtualInput.o server.o consoleReflectionObserver.o connectionObserver.o
+objects = main.o virtualInput.o server.o consoleReflectionObserver.o connectionObserver.o mouseControllObserver.o
 
 DEBUG?=0
 STRICT?=1
@@ -31,6 +31,8 @@ consoleReflectionObserver.o:
 	g++ -c consoleReflectionObserver.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)
 connectionObserver.o:
 	g++ -c connectionObserver.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)
+mouseControllObserver.o:
+	g++ -c mouseControllObserver.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)
 
 clean: # Delete all object files
 	rm *.o -f

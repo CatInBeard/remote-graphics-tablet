@@ -20,6 +20,7 @@
 namespace remoteGraphicsTablet{
     class VirtualInput{
         public:
+            VirtualInput(std::string);
             VirtualInput();
             ~VirtualInput();
             void start_drag();
