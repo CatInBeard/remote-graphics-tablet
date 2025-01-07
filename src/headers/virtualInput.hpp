@@ -2,9 +2,9 @@
 // 
 // Licensed under the MIT License. See LICENSE file for details.
 
-#ifndef MOUSE_H
+#ifndef VIRTUAL_INPUT_H
 
-#define MOUSE_H
+#define VIRTUAL_INPUT_H
 
 #include <stdio.h>
 #include <stdlib.h>

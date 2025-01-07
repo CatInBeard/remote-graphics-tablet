@@ -2,11 +2,21 @@
 // 
 // Licensed under the MIT License. See LICENSE file for details.
 
+#include "headers/consoleReflectionObserver.hpp"
 #include "headers/virtualInput.hpp"
+#include "headers/server.hpp"
+#include <memory>
 
 using namespace remoteGraphicsTablet;
 
 int main() {
+
+    Server server {};
+    server.addObserver(std::make_unique<ConsoleReflectionObserver>());
+    server.serve();
+
+    return 0;
+
     VirtualInput vInput {};
     usleep(100000); // Delay required for setup
 
