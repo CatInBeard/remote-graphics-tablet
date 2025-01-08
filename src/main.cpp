@@ -2,20 +2,13 @@
 // 
 // Licensed under the MIT License. See LICENSE file for details.
 
-#include "headers/consoleReflectionObserver.hpp"
-#include "headers/mouseControllObserver.hpp"
-#include "headers/virtualInput.hpp"
-#include "headers/server.hpp"
-#include <memory>
+#include "headers/cli.hpp"
 
-using namespace remoteGraphicsTablet;
+using namespace remoteMouse;
 
-int main() {
+int main(int argc, char* argv[]) {
 
-    Server server {};
-    server.addObserver(std::make_unique<ConsoleReflectionObserver>());
-    server.addObserver(std::make_unique<MouseControllObserver>());
-    server.serve();
+    CLI cli {argc, argv};
 
-    return 0;
+    return cli.run();
 }

@@ -17,7 +17,7 @@
 #include <stdexcept>
 #include <iostream>
 
-namespace remoteGraphicsTablet{
+namespace remoteMouse{
     class VirtualInput{
         public:
             VirtualInput(std::string);

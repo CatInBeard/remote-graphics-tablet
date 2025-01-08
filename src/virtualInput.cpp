@@ -9,7 +9,7 @@
 #include <cerrno>  // для errno
 
 
-namespace remoteGraphicsTablet {
+namespace remoteMouse {
     VirtualInput::VirtualInput(std::string deviceName){
         deviceFD = create_uinput_device(deviceName);
         send_sync();

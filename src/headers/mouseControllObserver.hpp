@@ -11,14 +11,15 @@
 #include "virtualInput.hpp"
 #include <memory>
 
-namespace remoteGraphicsTablet{
+namespace remoteMouse{
     class MouseControllObserver : public ConnectionObserver{
         public:
+            MouseControllObserver(std::string mouseName);
             MouseControllObserver();
             virtual ~MouseControllObserver();
-            virtual void notifyConnect(sockaddr_in) override;
-            virtual void notifyNewMessage(const char*) override;
-            virtual void notifyDisconnect(sockaddr_in) override;
+            virtual void notifyConnect(sockaddr_in, Server*, int client_fd) override;
+            virtual void notifyNewMessage(const char*, Server*, int client_fd) override;
+            virtual void notifyDisconnect(sockaddr_in, Server*) override;
         protected:
             std::pair<std::string, int> splitString(const std::string&);
             std::unique_ptr<VirtualInput> vInput;

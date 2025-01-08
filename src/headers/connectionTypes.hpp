@@ -6,7 +6,7 @@
 
 #define CONNECTION_TYPES_H
 
-namespace remoteGraphicsTablet{
+namespace remoteMouse{
     enum class ConnectionTypes{
         tcp,
         udp

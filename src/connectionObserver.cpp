@@ -7,7 +7,7 @@
 #include <string>
 #include <utility>
 
-namespace remoteGraphicsTablet{
+namespace remoteMouse{
     std::pair<std::string, int> ConnectionObserver::getIpAndPortFromSockadrIn(sockaddr_in address){
         char ip_str[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &address.sin_addr, ip_str, sizeof(ip_str));

@@ -7,7 +7,10 @@
 #include "headers/connectionTypes.hpp"
 #include <stdexcept>
 
-namespace remoteGraphicsTablet {
+#include <iostream>
+#include <algorithm>
+
+namespace remoteMouse {
     Server::Server(int port, ConnectionTypes connectionType){
         server_fd = createSocket(port, connectionType);
     }
@@ -55,30 +58,35 @@ namespace remoteGraphicsTablet {
             throw std::runtime_error("Failed to start listening");
         }
         for (;;) {
-            char *buffer[BUFFER_SIZE];
+            char buffer[BUFFER_SIZE];
             int client_fd;
             struct sockaddr_in address;
             socklen_t addrlen = sizeof(sockaddr_in);
-            
+
             if ((client_fd = accept(server_fd, (struct sockaddr *) &address, &addrlen)) < 0) {
                 throw std::runtime_error("Failed to accept connection");
             }
             
             for(const auto& observer: observers){
-                observer->notifyConnect(address);
+                observer->notifyConnect(address, this, client_fd);
             }
             
+            ssize_t readSize {};
+
             for (;;) {
-                if(read(client_fd, buffer, BUFFER_SIZE) == 0){
+                memset(buffer, 0, readSize);
+                readSize = read(client_fd, buffer, BUFFER_SIZE - 1);
+                if(readSize == 0){
                     break;
                 }
+                buffer[readSize] = '\0';
                 for(const auto& observer: observers){
-                    observer->notifyNewMessage( (char *) buffer);
+                    observer->notifyNewMessage( (char *) buffer, this, client_fd);
                 }
             }
 
             for(const auto& observer: observers){
-                observer->notifyDisconnect(address);
+                observer->notifyDisconnect(address, this);
             }
             close(client_fd);
         }
@@ -92,4 +100,21 @@ namespace remoteGraphicsTablet {
         observers.clear();
     }
 
+    void Server::answer(int client_fd, std::string message){
+        if(send(client_fd, message.c_str(), message.size(), 0) <0){
+            throw std::runtime_error("Can't answer");
+        }
+    }
+
+    void Server::unsubscribeObserver(ConnectionObserver* observer){
+        auto it = std::find_if(observers.begin(), observers.end(),
+            [observer](const std::unique_ptr<ConnectionObserver>& ptr) {
+                return ptr.get() == observer;
+            });
+
+        if (it != observers.end()) {
+            observers.erase(it);
+        }
+
+    }
 }

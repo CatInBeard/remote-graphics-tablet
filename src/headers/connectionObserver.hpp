@@ -10,12 +10,13 @@
 #include <utility>
 #include <string>
 
-namespace remoteGraphicsTablet{
+namespace remoteMouse{
+    class Server;
     class ConnectionObserver{
         public:
-            virtual void notifyConnect(sockaddr_in) = 0;
-            virtual void notifyNewMessage(const char*) = 0;
-            virtual void notifyDisconnect(sockaddr_in) = 0;
+            virtual void notifyConnect(sockaddr_in, Server*, int client_fd) = 0;
+            virtual void notifyNewMessage(const char*, Server*, int client_fd) = 0;
+            virtual void notifyDisconnect(sockaddr_in, Server*) = 0;
             virtual ~ConnectionObserver(){};
         protected:
             std::pair<std::string, int> getIpAndPortFromSockadrIn(sockaddr_in);

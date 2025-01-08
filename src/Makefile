@@ -1,7 +1,7 @@
-bin_name = remote-graphics-tablet
+bin_name = remote_mouse
 
 link_libs = 
-objects = main.o virtualInput.o server.o consoleReflectionObserver.o connectionObserver.o mouseControllObserver.o
+objects = main.o virtualInput.o server.o consoleReflectionObserver.o connectionObserver.o mouseControllObserver.o cli.o CLIAuthorizationController.o communicationControllObserver.o iptools.o
 
 DEBUG?=0
 STRICT?=1
@@ -33,6 +33,14 @@ connectionObserver.o:
 	g++ -c connectionObserver.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)
 mouseControllObserver.o:
 	g++ -c mouseControllObserver.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)
+cli.o:
+	g++ -c cli.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)
+CLIAuthorizationController.o:
+	g++ -c CLIAuthorizationController.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)
+communicationControllObserver.o:
+	g++ -c communicationControllObserver.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)	
+iptools.o:
+	g++ -c iptools.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)	
 
 clean: # Delete all object files
 	rm *.o -f

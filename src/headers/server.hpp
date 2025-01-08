@@ -21,15 +21,17 @@
 
 #define BUFFER_SIZE 1024
 
-namespace remoteGraphicsTablet{
+namespace remoteMouse{
     class Server{
         public:
-            Server(int port, ConnectionTypes connectionType);
+            Server(int port, ConnectionTypes connectionType = ConnectionTypes::tcp);
             Server();
             ~Server();
             void addObserver(std::unique_ptr<ConnectionObserver>);
             void resetObservers();
             void serve();
+            void answer(int client_fd, std::string message);
+            void unsubscribeObserver(ConnectionObserver* observer);
         protected:
             int createSocket(int port, ConnectionTypes connectionType);
             int server_fd;

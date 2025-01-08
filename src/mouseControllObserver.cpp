@@ -3,24 +3,29 @@
 // Licensed under the MIT License. See LICENSE file for details.
 
 #include "headers/mouseControllObserver.hpp"
+#include "headers/server.hpp"
 #include "headers/virtualInput.hpp"
 #include <iostream>
 #include <utility>
 
-namespace remoteGraphicsTablet {
+namespace remoteMouse {
 
-    MouseControllObserver::MouseControllObserver(){
-        vInput = std::make_unique<VirtualInput>();
+    MouseControllObserver::MouseControllObserver(std::string mouseName){
+        vInput = std::make_unique<VirtualInput>(mouseName);
         usleep(1000000); // Delay required for setup
     }
 
+    MouseControllObserver::MouseControllObserver(): MouseControllObserver("Virtual mouse"){}
+
     MouseControllObserver::~MouseControllObserver(){}
 
-    void MouseControllObserver::notifyConnect([[maybe_unused]] sockaddr_in adder){}
+    void MouseControllObserver::notifyConnect([[maybe_unused]] sockaddr_in adder, [[maybe_unused]] Server*, [[maybe_unused]] int client_fd){}
 
-    void MouseControllObserver::notifyDisconnect([[maybe_unused]] sockaddr_in adder){}
+    void MouseControllObserver::notifyDisconnect([[maybe_unused]] sockaddr_in adder, Server* server){
+        server->unsubscribeObserver(this);
+    }
 
-    void MouseControllObserver::notifyNewMessage(const char* message){
+    void MouseControllObserver::notifyNewMessage(const char* message, [[maybe_unused]] Server*, [[maybe_unused]] int client_fd){
         std::pair<std::string, int> responce = splitString(std::string{message});
         
         if (responce.first == "rx") {
@@ -46,10 +51,20 @@ namespace remoteGraphicsTablet {
         for (char ch : input) {
             if (std::isalpha(ch)) {
                 letters += ch;
-            } else if (std::isdigit(ch)) {
+            } else if (std::isdigit(ch) || ch == '-') {
                 numbers += ch;
             }
         }
-        return {letters, std::stoi(numbers)};
+
+        int numbersInt = 0;
+
+        try{
+            numbersInt = std::stoi(numbers);
+        }
+        catch(const std::exception& e ){
+            numbersInt = 0;
+        }
+        
+        return {letters, numbersInt};
     }
 }
