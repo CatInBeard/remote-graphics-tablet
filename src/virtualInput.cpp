@@ -5,8 +5,8 @@
 #include "headers/virtualInput.hpp"
 #include <iostream>
 #include <linux/input-event-codes.h>
-#include <cstring> // для strerror
-#include <cerrno>  // для errno
+#include <cstring>
+#include <cerrno>
 
 
 namespace remoteMouse {

@@ -1,4 +1,4 @@
-bin_name = remote_mouse
+bin_name = remote-mouse
 
 link_libs = 
 objects = main.o virtualInput.o server.o consoleReflectionObserver.o connectionObserver.o mouseControllObserver.o cli.o CLIAuthorizationController.o communicationControllObserver.o iptools.o
