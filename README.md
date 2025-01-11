@@ -1,23 +1,54 @@
 # Remote-mouse
-Remote mouse/touchpad/graphics tablet input for linux
+Remote mouse utility allows you to control a virtual mouse/touchpad/graphics tablet from another computer, phone, or tablet.
 
-## Communication v1
-### Create connection
-* connect to application (for example telnet 127.0.0.1:5123) 
-* You receive Welcome message with aviable options, for example `HELLO;SUPPORT:v1`
-* For any action You must authorize with sending `AUTH_REQUEST`
-* After confirm on device You should receive `SETUP_SUCCESS`
-* Now you can setup your mouse. For v1 you can type `v1rel`. It creates communication v1 with relativ positioning mouse 
-* After all, you can type commands
-### Commands list:
-1. rxN - move mouse X axys for n
-2. ryN - move mouse Y axys for n
-3. ml1 - start mouse left button press
-4. ml2 - end mouse left button press
+## Communication
+Go to [docs/comminication.md](./docs/communication.md) to read more about communication protocol
+
+## Install
+You can use packages from release:  
+Go to [github.com/CatInBeard/remote-mouse/releases](https://github.com/CatInBeard/remote-mouse/releases)
+### Archlinux
+1. Download remote-mouse-XXX.pkg.tar.zst from latest release
+2. run `pacman -U remote-mouse-XXX.pkg.tar.zst` to install from package
+### Debian/Ubuntu (.deb)
+1. Download remote-mouse-XXX.deb from latest release
+2. run `dpkg -i remote-mouse-XXX.deb` to install from package
+### Fedora/CentOS (.rpm) package
+1. Download remote-mouse-XXX.rpm from latest release
+2. run `rpm -i remote-mouse-XXX.rpm` to install from package
 
 ## Build
+### Manual build
 To build: 
 1. `git clone https://github.com/CatInBeard/remote-mouse/`
 2. `cd remote-mouse`
 3. `cd src`
 4. `make`
+4. `make install`
+
+### Archlinux package
+1. `git clone https://github.com/CatInBeard/remote-mouse/`
+2. `cd remote-mouse`
+3. `cd build/archlinux`
+4. `make`
+5. `pacman -U remote-mouse-XXX.pkg.tar.zst`
+
+### Debian/Ubuntu (.deb) package
+1. `git clone https://github.com/CatInBeard/remote-mouse/`
+2. `cd remote-mouse`
+3. `cd build/debian`
+4. `make`
+5. `dpkg -i remote-mouse-XXX.deb`
+
+### Fedora/CentOS (.rpm) package
+1. `git clone https://github.com/CatInBeard/remote-mouse/`
+2. `cd remote-mouse`
+3. `cd build/rpm`
+4. `make`
+5. `rpm -i remote-mouse-XXX.rpm`
+
+### Build all packages
+You can build packages for different systems with docker. To do it run `build.sh` in:
+1. CI/arch_build
+2. CI/deb_build 
+3. CI/rpm_build 
