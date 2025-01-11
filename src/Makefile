@@ -18,8 +18,13 @@ else
 	flags = -Wall -Wextra
 endif
 
-build: $(objects) # Build binary
+all: build strip clean
+
+build: $(objects)
 	g++ $(objects) $(DEBUG_FLAGS) -o $(bin_name) $(link_libs) $(flags)
+
+strip:
+	strip $(bin_name)
 
 main.o:
 	g++ -c main.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)
@@ -42,5 +47,9 @@ communicationControllObserver.o:
 iptools.o:
 	g++ -c iptools.cpp $(DEBUG_FLAGS) $(PROFILER_FLAGS) $(flags)	
 
-clean: # Delete all object files
+clean:
 	rm *.o -f
+	
+install:
+	chmod +x $(bin_name)
+	cp $(bin_name) /usr/bin/$(bin_name)
