@@ -104,6 +104,10 @@ namespace remoteMouse{
         "This program is licensed under the MIT License." << std::endl << std::endl <<
         "Examples:" << std::endl <<
         argv[0] << " -p 5123  # Start the server on port 5123" << std::endl <<
-        argv[0] << " -n -d \"My Virtual Mouse\"  # Start the server with automatic connection and custom device name" << std::endl;
+        argv[0] << " -n -d \"My Virtual Mouse\"  # Start the server with automatic connection and custom device name"
+        << std::endl << std::endl <<
+        "More information:" << std::endl <<
+        "Source code: https://github.com/CatinBeard/remote-mouse" << std::endl <<
+        "Communication protocol: https://github.com/CatInBeard/remote-mouse/blob/main/docs/communication.md" << std::endl;
     }
 }
