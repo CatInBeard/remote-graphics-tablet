@@ -15,9 +15,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Build deb
         run: |
-          make
-      - name: Build deb
-        run: |
           chmod -R 777 . && cd CI/deb_build/ && ./build.sh
 
       - name: Find .deb file
