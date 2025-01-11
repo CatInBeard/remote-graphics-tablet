@@ -1,4 +1,4 @@
-# Remote-mouse
+# Remote-mouse [![CodeFactor](https://www.codefactor.io/repository/github/catinbeard/remote-mouse/badge)](https://www.codefactor.io/repository/github/catinbeard/remote-mouse)  [![archlinux package builder](https://github.com/CatInBeard/remote-mouse/actions/workflows/arch_build.yaml/badge.svg)](https://github.com/CatInBeard/remote-mouse/actions/workflows/arch_build.yaml) [![debian package builder](https://github.com/CatInBeard/remote-mouse/actions/workflows/deb_build.yaml/badge.svg)](https://github.com/CatInBeard/remote-mouse/actions/workflows/deb_build.yaml) [![RPM package builder](https://github.com/CatInBeard/remote-mouse/actions/workflows/rpm_build.yaml/badge.svg)](https://github.com/CatInBeard/remote-mouse/actions/workflows/rpm_build.yaml) [![cppcheck static analysis](https://github.com/CatInBeard/remote-mouse/actions/workflows/cppcheck.yaml/badge.svg)](https://github.com/CatInBeard/remote-mouse/actions/workflows/cppcheck.yaml)  
 Remote mouse utility allows you to control a virtual mouse/touchpad/graphics tablet from another computer, phone, or tablet.
 
 ## Communication
