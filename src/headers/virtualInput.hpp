@@ -25,9 +25,15 @@ namespace remoteMouse{
             ~VirtualInput();
             void start_drag();
             void end_drag();
+            void start_drag_right();
+            void end_drag_right();
+            void start_drag_middle();
+            void end_drag_middle();
             void move_mouse_rel(int x, int y);
             void move_mouse_abs(int x, int y);
             void click_mouse_left();
+            void click_mouse_right();
+            void click_mouse_middle();
         protected:
             int create_uinput_device(const std::string& name);
             void send_event(int type, int code, int value);

@@ -35,6 +35,17 @@ namespace remoteMouse {
 
     void VirtualInput::start_drag() {
         VirtualInput::click_mouse(BTN_LEFT, 1);
+        send_sync();
+    }
+
+    void VirtualInput::start_drag_right() {
+        VirtualInput::click_mouse(BTN_RIGHT, 1);
+        send_sync();
+    }
+
+    void VirtualInput::start_drag_middle() {
+        VirtualInput::click_mouse(BTN_MIDDLE, 1);
+        send_sync();
     }
 
     void VirtualInput::end_drag() {
@@ -42,9 +53,31 @@ namespace remoteMouse {
         send_sync();
     }
 
+    void VirtualInput::end_drag_right() {
+        VirtualInput::click_mouse(BTN_RIGHT, 0);
+        send_sync();
+    }
+
+    void VirtualInput::end_drag_middle() {
+        VirtualInput::click_mouse(BTN_MIDDLE, 0);
+        send_sync();
+    }
+
     void VirtualInput::click_mouse_left() {
         click_mouse(BTN_LEFT, 1);
         click_mouse(BTN_LEFT, 0);
+        send_sync();
+    }
+
+    void VirtualInput::click_mouse_right() {
+        click_mouse(BTN_LEFT, 1);
+        click_mouse(BTN_LEFT, 0);
+        send_sync();
+    }
+
+    void VirtualInput::click_mouse_middle() {
+        click_mouse(BTN_MIDDLE, 1);
+        click_mouse(BTN_MIDDLE, 0);
         send_sync();
     }
 

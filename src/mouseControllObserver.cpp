@@ -42,6 +42,22 @@ namespace remoteMouse {
                 vInput->end_drag();
             }
         }
+        else if (responce.first == "mr") {
+            if(responce.second){
+                vInput->start_drag_right();
+            }
+            else {
+                vInput->end_drag_right();
+            }
+        }
+        else if (responce.first == "mm") {
+            if(responce.second){
+                vInput->start_drag_middle();
+            }
+            else {
+                vInput->end_drag_middle();
+            }
+        }
     }
 
     std::pair<std::string, int> MouseControllObserver::splitString(const std::string& input) {
