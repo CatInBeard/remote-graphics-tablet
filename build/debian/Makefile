@@ -2,7 +2,7 @@ bin_name = remote-mouse
 
 pkg_dir = pkg/DEBIAN
 bin_dir = pkg/usr/local/bin
-version = $(shell git describe --tags --abbrev=0 2>/dev/null || echo "1.0.0")
+version ?= $(shell git describe --tags --always --abbrev=0 2>/dev/null | { read input; if [ -z "$$input" ]; then echo "1.0.0"; else echo "$$input"; fi; })
 arch = $(shell uname -m | sed 's/x86_64/amd64/;s/i686/i386/;s/armv7l/armhf/;s/aarch64/arm64/')
 
 all: build clean

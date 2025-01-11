@@ -1,0 +1,71 @@
+name: Upload Packages to Release
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  upload-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build deb
+        run: |
+          make
+      - name: Build deb
+        run: |
+          chmod -R 777 . && cd CI/deb_build/ && ./build.sh
+
+      - name: Find .deb file
+        id: find_deb
+        run: |
+          DEB_FILE=$(find . -name "*.deb" | head -n 1)
+          echo "deb_file=$DEB_FILE" >> $GITHUB_ENV
+
+      - name: Upload .deb file
+        if: env.deb_file != ''
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.deb_file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build rpm
+        run: |
+          cd CI/rpm_build/ && ./build.sh
+
+      - name: Find .rpm file
+        id: find_rpm
+        run: |
+          RPM_FILE=$(find . -name "*.rpm" | head -n 1)
+          echo "rpm_file=$RPM_FILE" >> $GITHUB_ENV
+
+      - name: Upload .rpm file
+        if: env.rpm_file != ''
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.rpm_file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build archlinux
+        run: |
+          cd CI/arch_build/ && ./build.sh
+
+      - name: Find pacman file
+        id: find_arch
+        run: |
+          ARCH_FILE=$(find ./build/archlinux -name "*.tar*" ! -name "*debug*" | head -n 1)
+          echo "arch_file=$ARCH_FILE" >> $GITHUB_ENV
+
+      - name: Upload pacman file
+        if: env.arch_file != ''
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.arch_file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

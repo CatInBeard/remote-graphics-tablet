@@ -1,6 +1,6 @@
 pkgver() {
   if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-    printf "%s" "$(git describe --tags --always | sed 's/-/./g')"
+    printf "%s" "$(git describe --tags --always  --abbrev=0 | sed 's/-/./g')"
   else
     echo "1.0.0"
   fi

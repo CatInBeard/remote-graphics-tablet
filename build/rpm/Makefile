@@ -1,5 +1,5 @@
 bin_name = remote-mouse
-version = $(shell git describe --tags --abbrev=0 2>/dev/null || echo "1.0.0")
+version ?= $(shell git describe --tags --always --abbrev=0 2>/dev/null | { read input; if [ -z "$$input" ]; then echo "1.0.0"; else echo "$$input"; fi; })
 release = 1
 arch = $(shell uname -m)
 
