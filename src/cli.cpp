@@ -108,6 +108,7 @@ namespace remoteMouse{
         << std::endl << std::endl <<
         "More information:" << std::endl <<
         "Source code: https://github.com/CatinBeard/remote-mouse" << std::endl <<
-        "Communication protocol: https://github.com/CatInBeard/remote-mouse/blob/main/docs/communication.md" << std::endl;
+        "Communication protocol: https://github.com/CatInBeard/remote-mouse/blob/main/docs/communication.md" << std::endl <<
+        "Get android app: https://github.com/CatInBeard/remote-mouse-android" << std::endl;
     }
 }
