@@ -5,12 +5,14 @@
 #include "headers/communicationControllObserver.hpp"
 #include "headers/mouseControllObserver.hpp"
 #include "headers/server.hpp"
+#include <iostream>
+#include <stdexcept>
 #include <string>
 
 #define COMMUNICATION_HELLO "HELLO;SUPPORT:v1"
 #define COMMUNICATION_REJECT_SETUP "REJECT;SUPPORT:v1"
 #define COMMUNICATION_V1_SETUP_FAIL "SETUP_FAIL"
-#define COMMUNICATION_ALLREADY_AUTHORIZED "ALLREADY_AUTHORIZATION"
+#define COMMUNICATION_ALLREADY_AUTHORIZED "ALLREADY_AUTHORIZED"
 #define COMMUNICATION_AUTHORIZATION_SUCCESS "AUTHORIZATION_SUCCESS"
 #define COMMUNICATION_AUTHORIZATION_FAILED "AUTHORIZATION_FAILED"
 #define COMMUNICATION_SETUP_PREFIX "SETUP:"
@@ -32,7 +34,12 @@ namespace remoteMouse {
     }
 
     void CommunicationControllObserver::notifyConnect([[maybe_unused]] sockaddr_in adder, Server* server, int client_fd){
-        server->answer(client_fd, COMMUNICATION_HELLO);
+        try{
+            server->answer(client_fd, COMMUNICATION_HELLO);
+        }
+        catch(const std::runtime_error &e){
+            std::cerr << e.what() <<std::endl;
+        }
     }
     void CommunicationControllObserver::notifyDisconnect([[maybe_unused]] sockaddr_in adder, [[maybe_unused]] Server*){
         if(!skipAuth){
@@ -44,17 +51,31 @@ namespace remoteMouse {
         msg = trimNewline(msg);
         if(msg == COMMUNICATION_REQUEST_AUTHORIZATION){
             if(isAuthorized){
-                server->answer(client_fd, COMMUNICATION_ALLREADY_AUTHORIZED);
+                try{
+                    server->answer(client_fd, COMMUNICATION_ALLREADY_AUTHORIZED);
+                }
+                catch(const std::runtime_error &e){
+                    if(!skipAuth){
+                        isAuthorized = false;
+                    }
+                    std::cerr << e.what() <<std::endl;
+                }
             }
             else{
-                server->answer(client_fd, COMMUNICATION_AUTHORIZATION_WAITING);
-                if(authController->authorize()){
-                    isAuthorized = true;
-                    server->answer(client_fd, COMMUNICATION_AUTHORIZATION_SUCCESS);
+                try{
+                    server->answer(client_fd, COMMUNICATION_AUTHORIZATION_WAITING);
+                    if(authController->authorize()){
+                        isAuthorized = true;
+                        server->answer(client_fd, COMMUNICATION_AUTHORIZATION_SUCCESS);
+                    }
+                    else{
+                        isAuthorized = false;
+                        server->answer(client_fd, COMMUNICATION_AUTHORIZATION_FAILED);
+                    }
                 }
-                else{
+                catch(const std::runtime_error &e){
                     isAuthorized = false;
-                    server->answer(client_fd, COMMUNICATION_AUTHORIZATION_FAILED);
+                    std::cerr << e.what() <<std::endl;
                 }
             }
         }
@@ -64,24 +85,50 @@ namespace remoteMouse {
                 if(setup.find("v1") == 0){
                     setup = setup.substr(strlen("v1"));
                     if(setup == "rel"){
-                        server->addObserver(std::make_unique<MouseControllObserver>(deviceName));
-                        server->answer(client_fd, COMMUNICATION_SETUP_SUCCESS);
+                        try{
+                            server->answer(client_fd, COMMUNICATION_SETUP_SUCCESS);
+                            server->addObserver(std::make_unique<MouseControllObserver>(deviceName));
+                        }
+                        catch(const std::runtime_error &e){
+                            std::cerr << e.what() <<std::endl;
+                        }
+                        
                     }
                     else{
-                        server->answer(client_fd, COMMUNICATION_V1_SETUP_FAIL);
+                        try{
+                            server->answer(client_fd, COMMUNICATION_V1_SETUP_FAIL);
+                        }
+                        catch(const std::runtime_error &e){
+                            std::cerr << e.what() <<std::endl;
+                        }
                     }
                 }
                 else{
-                    server->answer(client_fd, COMMUNICATION_REJECT_SETUP);
+                    try{
+                        server->answer(client_fd, COMMUNICATION_REJECT_SETUP);
+                    }
+                    catch(const std::runtime_error &e){
+                        std::cerr << e.what() <<std::endl;
+                    }
                 }
             }
             else{
-                server->answer(client_fd, COMMUNICATION_AUTHORIZATION_REQUIRED);
+                try{
+                    server->answer(client_fd, COMMUNICATION_AUTHORIZATION_REQUIRED);
+                }
+                catch(const std::runtime_error &e){
+                    std::cerr << e.what() <<std::endl;
+                }
             }
         }
         else{
             if(!isAuthorized){
-                server->answer(client_fd, COMMUNICATION_AUTHORIZATION_REQUIRED);
+                try{
+                    server->answer(client_fd, COMMUNICATION_AUTHORIZATION_REQUIRED);
+                }
+                catch(const std::runtime_error &e){
+                    std::cerr << e.what() <<std::endl;
+                }
             }
         }
     }

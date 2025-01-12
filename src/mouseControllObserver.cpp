@@ -5,14 +5,12 @@
 #include "headers/mouseControllObserver.hpp"
 #include "headers/server.hpp"
 #include "headers/virtualInput.hpp"
-#include <iostream>
 #include <utility>
 
 namespace remoteMouse {
 
     MouseControllObserver::MouseControllObserver(std::string mouseName){
         vInput = std::make_unique<VirtualInput>(mouseName);
-        usleep(1000000); // Delay required for setup
     }
 
     MouseControllObserver::MouseControllObserver(): MouseControllObserver("Virtual mouse"){}
