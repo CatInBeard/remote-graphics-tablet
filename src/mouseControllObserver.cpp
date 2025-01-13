@@ -24,61 +24,81 @@ namespace remoteMouse {
     }
 
     void MouseControllObserver::notifyNewMessage(const char* message, [[maybe_unused]] Server*, [[maybe_unused]] int client_fd){
-        std::pair<std::string, int> responce = splitString(std::string{message});
+        std::list<std::pair<std::string, int>> commands = splitString(std::string{message});
+
+        for(std::pair<std::string, int> command: commands ){
         
-        if (responce.first == "rx") {
-            vInput->move_mouse_rel(responce.second, 0);
-        }
-        else if (responce.first == "ry") {
-            vInput->move_mouse_rel(0, responce.second);
-        }
-        else if (responce.first == "ml") {
-            if(responce.second){
-                vInput->start_drag();
+            if (command.first == "rx") {
+                vInput->move_mouse_rel(command.second, 0);
             }
-            else {
-                vInput->end_drag();
+            else if (command.first == "ry") {
+                vInput->move_mouse_rel(0, command.second);
             }
-        }
-        else if (responce.first == "mr") {
-            if(responce.second){
-                vInput->start_drag_right();
+            else if (command.first == "ml") {
+                if(command.second){
+                    vInput->start_drag();
+                }
+                else {
+                    vInput->end_drag();
+                }
             }
-            else {
-                vInput->end_drag_right();
+            else if (command.first == "mr") {
+                if(command.second){
+                    vInput->start_drag_right();
+                }
+                else {
+                    vInput->end_drag_right();
+                }
             }
-        }
-        else if (responce.first == "mm") {
-            if(responce.second){
-                vInput->start_drag_middle();
-            }
-            else {
-                vInput->end_drag_middle();
+            else if (command.first == "mm") {
+                if(command.second){
+                    vInput->start_drag_middle();
+                }
+                else {
+                    vInput->end_drag_middle();
+                }
             }
         }
     }
 
-    std::pair<std::string, int> MouseControllObserver::splitString(const std::string& input) {
+    std::list<std::pair<std::string, int>> MouseControllObserver::splitString(const std::string& input) {
+
+        std::list<std::pair<std::string, int>> commands;
+
         std::string letters;
         std::string numbers;
 
+        int numbersInt = 0;
+
         for (char ch : input) {
             if (std::isalpha(ch)) {
+                if(numbers.length()){
+                    try{
+                        numbersInt = std::stoi(numbers);
+                    }
+                    catch(const std::exception& e ){
+                        numbersInt = 0;
+                    }
+                    commands.push_back({letters, numbersInt});
+                    numbers.clear();
+                    letters.clear();
+                }
                 letters += ch;
             } else if (std::isdigit(ch) || ch == '-') {
                 numbers += ch;
             }
         }
 
-        int numbersInt = 0;
-
-        try{
-            numbersInt = std::stoi(numbers);
-        }
-        catch(const std::exception& e ){
-            numbersInt = 0;
+        if(numbers.length() && letters.length()){
+            try{
+                numbersInt = std::stoi(numbers);
+            }
+            catch(const std::exception& e ){
+                numbersInt = 0;
+            }
+            commands.push_back({letters, numbersInt});
         }
         
-        return {letters, numbersInt};
+        return commands;
     }
 }

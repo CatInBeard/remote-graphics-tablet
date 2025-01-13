@@ -9,6 +9,7 @@
 #include "connectionObserver.hpp"
 #include "virtualInput.hpp"
 #include "virtualInput.hpp"
+#include <list>
 #include <memory>
 
 namespace remoteMouse{
@@ -21,7 +22,7 @@ namespace remoteMouse{
             virtual void notifyNewMessage(const char*, Server*, int client_fd) override;
             virtual void notifyDisconnect(sockaddr_in, Server*) override;
         protected:
-            std::pair<std::string, int> splitString(const std::string&);
+            std::list<std::pair<std::string, int>> splitString(const std::string&);
             std::unique_ptr<VirtualInput> vInput;
     };
 }
